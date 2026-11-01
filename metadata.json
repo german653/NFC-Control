@@ -1,0 +1,6 @@
+{
+  "name": "Cybernetic Field Terminal PWA",
+  "description": "Terminal punto de venta táctico y ledger de inventario con soporte NFC, almacenamiento local sin conexión (offline-first) y PWA optimizada para iPhone.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
