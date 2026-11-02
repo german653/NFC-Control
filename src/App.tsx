@@ -4,6 +4,7 @@ import { BottomNav } from './components/BottomNav';
 import { NewMovementModal } from './components/NewMovementModal';
 import { NewProductModal } from './components/NewProductModal';
 import { StockView } from './components/StockView';
+import { QRGeneratorView } from './components/QRGeneratorView';
 import { IOSGuideModal } from './components/IOSGuideModal';
 import { DeployGuideModal } from './components/DeployGuideModal';
 import { Movement, MovementType, FilterType, Product, NavTab } from './types';
@@ -115,10 +116,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 flex flex-col font-sans selection:bg-black selection:text-white pb-24">
       {/* Header */}
-      <Header
-        onOpenIosGuide={() => setShowIosGuide(true)}
-        onOpenDeployGuide={() => setShowDeployGuide(true)}
-      />
+      <Header />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 py-4 space-y-4">
         {/* VIEW 1: MOVEMENTS & BALANCE */}
@@ -299,14 +297,6 @@ export default function App() {
                             </p>
                             <div className="flex items-center gap-1.5 text-[11px] text-zinc-400 mt-0.5">
                               <span>{formattedDate}</span>
-                              {item.quantity && item.quantity > 0 && (
-                                <>
-                                  <span>•</span>
-                                  <span className="text-zinc-700 font-semibold bg-zinc-100 px-1 rounded">
-                                    {item.quantity} {item.quantity === 1 ? 'unidad' : 'unidades'}
-                                  </span>
-                                </>
-                              )}
                               {item.paymentMethod && (
                                 <>
                                   <span>•</span>
@@ -314,6 +304,23 @@ export default function App() {
                                 </>
                               )}
                             </div>
+
+                            {/* Multi-item breakdown tags */}
+                            {item.items && item.items.length > 0 ? (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {item.items.map((sub, sIdx) => (
+                                  <span key={sIdx} className="text-[10px] bg-zinc-100 border border-zinc-200 text-zinc-700 font-medium px-1.5 py-0.5 rounded-md">
+                                    {sub.quantity}x {sub.productName}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : item.quantity && item.quantity > 0 ? (
+                              <div className="mt-0.5">
+                                <span className="text-[10px] bg-zinc-100 text-zinc-700 font-medium px-1.5 py-0.5 rounded-md">
+                                  {item.quantity} {item.quantity === 1 ? 'unidad' : 'unidades'}
+                                </span>
+                              </div>
+                            ) : null}
                           </div>
                         </div>
 
@@ -357,6 +364,11 @@ export default function App() {
             onUpdateStock={handleUpdateStock}
             onDeleteProduct={handleDeleteProduct}
           />
+        )}
+
+        {/* VIEW 3: QR GENERATOR */}
+        {activeTab === 'qr' && (
+          <QRGeneratorView />
         )}
       </main>
 

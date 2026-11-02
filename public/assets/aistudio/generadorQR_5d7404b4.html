@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Interactivo de Códigos QR Pro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --primary: #0066ff;
+            --primary-hover: #0052cc;
+            --text: #172b4d;
+            --border: #dfe1e6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #5e6c84;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="url"], input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="url"]:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .qr-output-section {
+            margin-top: 30px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 25px;
+        }
+
+        .qr-box {
+            background: #ffffff;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .raw-qr {
+            display: none;
+        }
+
+        canvas.hd-canvas {
+            width: 240px;
+            height: 240px;
+            display: block;
+        }
+
+        .btn-download {
+            background-color: #00875a;
+        }
+
+        .btn-download:hover {
+            background-color: #006644;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Generador Dinámico de QR</h1>
+    <p class="subtitle">Ingresá cualquier enlace para generar y descargar su código QR en alta calidad HD (1000x1000 px).</p>
+
+    <div class="form-group">
+        <label for="url-input">Ingresá la URL o Enlace:</label>
+        <input type="url" id="url-input" placeholder="https://ejemplo.com/tu-link" autocomplete="off">
+    </div>
+
+    <div class="form-group">
+        <label for="filename-input">Nombre para el archivo (opcional):</label>
+        <input type="text" id="filename-input" placeholder="mi_codigo_qr" autocomplete="off">
+    </div>
+
+    <button class="btn" onclick="procesarYGenerarQR()">⚡ Generar Código QR</button>
+
+    <div id="qr-output" class="qr-output-section">
+        <div class="qr-box">
+            <div id="raw-qr-holder" class="raw-qr"></div>
+            <canvas id="hd-canvas" class="hd-canvas"></canvas>
+        </div>
+
+        <button class="btn btn-download" onclick="descargarPNG()">📥 Descargar PNG de Alta Calidad</button>
+    </div>
+</div>
+
+<script>
+    const HD_SIZE = 1000; // Resolución 1000x1000 px para impresión impecable
+
+    function procesarYGenerarQR() {
+        const urlInput = document.getElementById('url-input').value.trim();
+        if (!urlInput) {
+            alert("Por favor ingresá un enlace o URL válida.");
+            return;
+        }
+
+        const holder = document.getElementById('raw-qr-holder');
+        holder.innerHTML = ''; // Limpiar previo
+
+        // Instanciar matriz QR con máxima corrección de errores (High = 30% recuperable)
+        new QRCode(holder, {
+            text: urlInput,
+            width: 256,
+            height: 256,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        setTimeout(() => {
+            const sourceImg = holder.querySelector('img') || holder.querySelector('canvas');
+            if (!sourceImg) return;
+
+            const canvas = document.getElementById('hd-canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = HD_SIZE;
+            canvas.height = HD_SIZE;
+
+            // Fondo blanco
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, HD_SIZE, HD_SIZE);
+
+            // Sin suavizado para mantener módulos perfectamente rectos
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(sourceImg, 0, 0, HD_SIZE, HD_SIZE);
+
+            // Mostrar resultado
+            document.getElementById('qr-output').style.display = 'flex';
+        }, 150);
+    }
+
+    function descargarPNG() {
+        const canvas = document.getElementById('hd-canvas');
+        let filenameInput = document.getElementById('filename-input').value.trim();
+        if (!filenameInput) {
+            filenameInput = "codigo_qr_hd";
+        }
+        
+        if (!filenameInput.toLowerCase().endsWith('.png')) {
+            filenameInput += ".png";
+        }
+
+        const enlace = document.createElement('a');
+        enlace.download = filenameInput;
+        enlace.href = canvas.toDataURL('image/png', 1.0);
+        document.body.appendChild(enlace);
+        enlace.click();
+        document.body.removeChild(enlace);
+    }
+</script>
+
+</body>
+</html>

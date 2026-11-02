@@ -45,13 +45,13 @@ export const StockView: React.FC<StockViewProps> = ({
 
         <div className="bg-white rounded-2xl border border-zinc-200 p-3.5 shadow-xs">
           <span className="text-[11px] font-medium text-zinc-500 uppercase block mb-0.5">
-            Valor de Venta
+            Valor Total de Stock
           </span>
           <div className="text-2xl font-black font-mono-numbers text-zinc-900">
             ${valorInventarioVenta.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
           </div>
           <span className="text-[10px] text-zinc-400">
-            Costo: ${valorInventarioCosto.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+            A precio de venta
           </span>
         </div>
 
@@ -137,13 +137,7 @@ export const StockView: React.FC<StockViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2 text-xs text-zinc-500 mt-1 font-mono-numbers">
-                      <span>Venta: <strong className="text-zinc-900">${prod.price.toLocaleString('es-ES')}</strong></span>
-                      {prod.cost > 0 && (
-                        <>
-                          <span>•</span>
-                          <span>Costo: ${prod.cost.toLocaleString('es-ES')}</span>
-                        </>
-                      )}
+                      <span>Precio: <strong className="text-zinc-900">${prod.price.toLocaleString('es-ES')}</strong></span>
                     </div>
                   </div>
 

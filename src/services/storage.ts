@@ -152,8 +152,15 @@ export const storage = {
     const updated = [newMovement, ...current];
     this.saveMovements(updated);
 
-    // If movement is linked to a product and quantity, update stock!
-    if (newMovement.productId && newMovement.quantity && newMovement.quantity > 0) {
+    // If movement has multiple items, update each product's stock!
+    if (newMovement.items && newMovement.items.length > 0) {
+      for (const it of newMovement.items) {
+        if (it.productId && it.quantity > 0) {
+          const delta = newMovement.type === 'VENTA' ? -it.quantity : it.quantity;
+          this.updateProductStock(it.productId, delta);
+        }
+      }
+    } else if (newMovement.productId && newMovement.quantity && newMovement.quantity > 0) {
       const delta = newMovement.type === 'VENTA' ? -newMovement.quantity : newMovement.quantity;
       this.updateProductStock(newMovement.productId, delta);
     }

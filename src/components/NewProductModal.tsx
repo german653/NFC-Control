@@ -85,7 +85,7 @@ export const NewProductModal: React.FC<NewProductModalProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block font-medium text-zinc-700 mb-1">
-                Precio de Venta ($)
+                Precio de Venta ($) *
               </label>
               <input
                 type="number"
@@ -101,24 +101,7 @@ export const NewProductModal: React.FC<NewProductModalProps> = ({
 
             <div>
               <label className="block font-medium text-zinc-700 mb-1">
-                Costo de Compra ($)
-              </label>
-              <input
-                type="number"
-                step="any"
-                inputMode="decimal"
-                placeholder="0.00"
-                value={cost}
-                onChange={e => setCost(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-zinc-300 bg-white text-zinc-900 font-mono-numbers text-sm focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="block font-medium text-zinc-700 mb-1">
-                Stock Inicial (Unidades)
+                Stock Inicial (Unidades) *
               </label>
               <input
                 type="number"
@@ -130,19 +113,19 @@ export const NewProductModal: React.FC<NewProductModalProps> = ({
                 className="w-full px-3 py-2 rounded-xl border border-zinc-300 bg-white text-zinc-900 font-mono-numbers text-sm focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
+          </div>
 
-            <div>
-              <label className="block font-medium text-zinc-700 mb-1">
-                Categoría (Opcional)
-              </label>
-              <input
-                type="text"
-                placeholder="Ej. Ropa, Almacén..."
-                value={category}
-                onChange={e => setCategory(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-zinc-300 bg-white text-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
+          <div>
+            <label className="block font-medium text-zinc-700 mb-1">
+              Categoría (Opcional)
+            </label>
+            <input
+              type="text"
+              placeholder="Ej. Ropa, Almacén, Accesorios..."
+              value={category}
+              onChange={e => setCategory(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-zinc-300 bg-white text-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            />
           </div>
 
           <div className="pt-2 flex items-center gap-2">

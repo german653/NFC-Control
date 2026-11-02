@@ -9,12 +9,20 @@ export interface Product {
   category?: string;
 }
 
+export interface MovementItem {
+  productId?: string;
+  productName: string;
+  quantity: number;
+  unitPrice?: number;
+}
+
 export interface Movement {
   id: string;
   type: MovementType;
   concept: string;
   amount: number;
   date: string; // ISO string
+  items?: MovementItem[];
   productId?: string;
   productName?: string;
   quantity?: number;
@@ -24,4 +32,4 @@ export interface Movement {
 }
 
 export type FilterType = 'TODOS' | 'GANANCIAS' | 'PERDIDAS';
-export type NavTab = 'movements' | 'stock';
+export type NavTab = 'movements' | 'stock' | 'qr';
